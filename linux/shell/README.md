@@ -1,0 +1,2 @@
+# 错误输出到屏幕并同时输出到多个文件`2>&1` 这种方式当输出较多之后再发生错误，要找出错误信息查阅量就过大。示例代码：```bashtmpfile=$(mktemp --tmpdir=/dev/shm -t biz.sh.XXXXXX) #创建临时文件,文件存放在内存中bash biz.sh 2>$tmpfile 1>>biz.log #执行封装好的业务代码returncode=$? #获取返回码# biz.log包含标准输出和错误输出，biz_errors.log仅包含错误输出cat $tmpfile | tee -a biz.log -a biz_errors.logrm -f $tmpfile #删除临时文件exit $returncode```
+`biz.sh`内容```bashecho "start"id nonexistsuser #模拟报错returncode=$?if [ $returncode -ne 0 ]; then exit $returncodefiecho "end"```
